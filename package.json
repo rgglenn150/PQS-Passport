@@ -5,18 +5,27 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build --prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve --prod":"npx http-server -p 8080 dist/pwa-entry-app/browser",
+    "ngrok": "ngrok http 8080",
+    "deploy --prod": "ng build --configuration production && npx http-server -p 8080 dist/pwa-entry-app/browser"
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^19.2.13",
+    "@angular/cdk": "^19.2.17",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
     "@angular/forms": "^19.2.0",
+    "@angular/material": "^19.2.17",
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@angular/service-worker": "^19.2.0",
+    "ngx-indexed-db": "^20.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

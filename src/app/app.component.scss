@@ -1,0 +1,29 @@
+.container {
+  margin: 1rem;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.search-bar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  width: 150px;
+  min-width: 120px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+table {
+  width: 100%;
+  overflow: auto;
+}

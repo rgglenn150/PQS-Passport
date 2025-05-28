@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { EntryService } from './entry.service';
+import { DeleteEntryDialogComponent } from './actions/delete-entry-dialog/delete-entry-dialog.component';
 
 interface Entry {
   passportNo: string;
@@ -38,7 +39,7 @@ interface Entry {
   ],
 })
 export class AppComponent implements AfterViewInit {
-  displayedColumns: string[] = ['passportNo', 'name', 'date', 'commodity'];
+  displayedColumns: string[] = ['passportNo', 'name', 'date', 'commodity','actions'];
   dataSource = new MatTableDataSource<Entry>([]);
   searchField = new FormControl('passportNo');
   searchTerm = new FormControl('');
@@ -97,6 +98,7 @@ export class AppComponent implements AfterViewInit {
         this.dataSource.data = [...this.dataSource.data, result];
         this.paginator.firstPage();
         this.applyFilter(this.searchTerm.value);
+        this.loadEntries(); // Reload entries to ensure data is up-to-date
       }
     });
   }
@@ -108,9 +110,32 @@ export class AppComponent implements AfterViewInit {
   }
   loadEntries() {
     this.entryService.getAllEntries().subscribe((entries) => {
-      console.log('rgdb entried', entries);
-      this.dataSource.data = entries as Entry[];
-      this.entries = entries;
+      // Sort entries by date, newest first
+      const sortedEntries = (entries as Entry[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      this.dataSource.data = sortedEntries;
+      this.entries = sortedEntries;
     });
   }
+
+  deleteEntry(entry:any) {
+    this.entryService.deleteEntry(entry.id).subscribe(() => {
+      this.dataSource.data = this.dataSource.data.filter((e:any) => e.id !== entry.id);
+      this.entries = this.entries.filter(e => e.id !== entry.id);
+      this.applyFilter(this.searchTerm.value);
+    });
+  }
+  
+  openDeleteDialog(entry: any) {
+    console.log('rgdb openDeleteDialog', entry);
+    const dialogRef = this.dialog.open(DeleteEntryDialogComponent, {
+      data: { ...entry },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteEntry(entry);
+      }
+    });
+  }
+  
 }

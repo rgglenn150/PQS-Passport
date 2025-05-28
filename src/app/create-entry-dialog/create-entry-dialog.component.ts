@@ -30,23 +30,25 @@ export class CreateEntryDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CreateEntryDialogComponent>,
-    private entryService:EntryService
+    private entryService: EntryService
   ) {
     this.entryForm = this.fb.group({
       passportNo: ['', Validators.required],
-      name: ['', Validators.required],
-      date: ['', Validators.required],
-      commodity: ['', Validators.required],
+      name: [''],
+      date: [new Date(), Validators.required],
+      commodity: [''],
     });
   }
 
   onSubmit() {
-
     if (this.entryForm.valid) {
-       console.log('rgdb subom')
-     this.entryService.addEntry(this.entryForm.value).subscribe(() => {
-      this.dialogRef.close(true);
-    },err=>console.log(err));
+      console.log('rgdb subom');
+      this.entryService.addEntry(this.entryForm.value).subscribe(
+        () => {
+          this.dialogRef.close(true);
+        },
+        (err) => console.log(err)
+      );
     }
   }
 

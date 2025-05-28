@@ -16,7 +16,7 @@ describe('AppComponent', () => {
 
   it(`should have the 'pwa-entry-app' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
+    const app:any = fixture.componentInstance;
     expect(app.title).toEqual('pwa-entry-app');
   });
 

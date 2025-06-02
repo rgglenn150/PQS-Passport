@@ -44,6 +44,7 @@ export class AppComponent implements AfterViewInit {
   searchField = new FormControl('passportNo');
   searchTerm = new FormControl('');
   entries: any[] = [];
+  deferredPrompt:any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -107,6 +108,36 @@ export class AppComponent implements AfterViewInit {
     this.dataSource.filter = filterValue
       ? filterValue.trim().toLowerCase()
       : '';
+  }
+
+
+  installPwa(){
+    // Prompt the user to install the PWA (if supported)
+    const nav = window.navigator as any;
+    if ('standalone' in nav && nav.standalone) {
+      // Already installed on iOS
+      alert('This app is already installed on your device.');
+      return;
+    }
+
+    // For iOS, show instructions since there is no install prompt
+    if (/iphone|ipad|ipod/i.test(window.navigator.userAgent)) {
+      alert(
+        'To install this app on your iPad, tap the Share button in Safari and then "Add to Home Screen".'
+      );
+      return;
+    }
+
+    // For other platforms (Android, desktop), try to trigger the install prompt
+    this.deferredPrompt = (window as any).deferredPrompt;
+    if (this.deferredPrompt) {
+      this.deferredPrompt.prompt();
+      this.deferredPrompt.userChoice.then(() => {
+        (window as any).deferredPrompt = null;
+      });
+    } else {
+      alert('Install prompt is not available. Try using Chrome or Edge.');
+    }
   }
   loadEntries() {
     this.entryService.getAllEntries().subscribe((entries) => {

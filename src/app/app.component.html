@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <span>PWS by RGS oftware</span>
+  <span>PWS by RG Software</span>
+  <button *ngIf="deferredPrompt" mat-raised-button color="accent" (click)="installPwa()">
+    Install App
+  </button>
   <span class="spacer"></span>
   <button mat-raised-button color="accent" (click)="openCreateDialog()">Create Entry</button>
 </mat-toolbar>
